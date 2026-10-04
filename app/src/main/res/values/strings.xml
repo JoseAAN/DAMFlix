@@ -4,4 +4,6 @@
     <string name="avatar_desc" />
     <string name="user_name_label">Jose</string>
     <string name="user_role">Usuario</string>
+    <string name="user_stats_viewed">37 Películas Vistas</string>
+    <string name="user_stats_reviewed">12 Reseñas</string>
 </resources>

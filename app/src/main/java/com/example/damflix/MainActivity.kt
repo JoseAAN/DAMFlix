@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -31,14 +32,13 @@ import androidx.compose.ui.unit.dp
 import com.example.damflix.ui.theme.DAMFlixTheme
 
 class MainActivity : ComponentActivity() {
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             DAMFlixTheme {
                 Scaffold( modifier = Modifier.fillMaxSize() ) {
-CargarPerfil();
+                    innerPadding -> PerfilUsuario(modifier = Modifier.padding(innerPadding));
                 }
             }
         }
@@ -46,9 +46,9 @@ CargarPerfil();
 }
 
 @Composable
-fun CargarPerfil(){
+fun PerfilUsuario(modifier: Modifier = Modifier){
     Row(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = modifier.fillMaxWidth().padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
@@ -58,24 +58,10 @@ fun CargarPerfil(){
         )
         Spacer(modifier = Modifier.width(12.dp))
         Column {
-            Text(text = stringResource(id = R.string.user_name_label), style = MaterialTheme.typography.headlineSmall)
-            Text(text = stringResource(id = R.string.user_role), style = MaterialTheme.typography.headlineSmall)
+            Text(text = stringResource(id = R.string.user_name_label), style = MaterialTheme.typography.titleLarge)
+            Text(text = stringResource(id = R.string.user_role), style = MaterialTheme.typography.bodyMedium)
+            Text(text = stringResource(id = R.string.user_stats_viewed), style = MaterialTheme.typography.bodyMedium)
+            Text(text = stringResource(id = R.string.user_stats_reviewed), style = MaterialTheme.typography.bodyMedium)
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    DAMFlixTheme {
-        Greeting("Android")
     }
 }
