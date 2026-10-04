@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DAMFlix</string>
+    <string name="desc_poster" />
+    <string name="avatar_desc" />
+    <string name="user_name_label">Jose</string>
+    <string name="user_role">Usuario</string>
+</resources>
