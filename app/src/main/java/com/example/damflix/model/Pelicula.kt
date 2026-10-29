@@ -1,7 +1,10 @@
 package com.example.damflix.model
 
 data class Pelicula(
-    val id: Int,
+    val id: Int = 0,
     val titulo: String,
-    val esFavorita: Boolean
+    val director: String,
+    val anio: Int,
+    val esVista: Boolean = false,
+    val esFavorita: Boolean = false
 )

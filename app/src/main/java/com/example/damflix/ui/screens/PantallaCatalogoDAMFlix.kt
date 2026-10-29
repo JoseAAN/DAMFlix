@@ -34,9 +34,9 @@ import com.example.damflix.model.Pelicula
 fun PantallaCatalogoDAMFlix() {
     val peliculas = remember {
         mutableStateListOf(
-            Pelicula(1, "Star Wars", false),
-            Pelicula(2, "El Señor de los Anillos", true),
-            Pelicula(3, "Pulp Fiction", false)
+            Pelicula(1, "Star Wars", "George Lucas", 1977, true, false),
+            Pelicula(2, "El Señor de los Anillos", "Peter Jackson", 2001, false, true),
+            Pelicula(3, "Pulp Fiction", "Quentin Tarantino", 1994, true, false)
         )
     }
     Scaffold(topBar = {

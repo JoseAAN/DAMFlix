@@ -3,16 +3,7 @@ package com.example.damflix.navigation
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ShortNavigationBarItem
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -23,6 +14,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.damflix.ui.screens.FormularioPelicula
 import com.example.damflix.ui.screens.PantallaCatalogoDAMFlix
 import com.example.damflix.ui.screens.PerfilUsuario
+import com.example.damflix.viewmodel.PeliculaViewModelFactory
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.damflix.ui.screens.ListaPeliculasScreen
+import com.example.damflix.viewmodel.PeliculaViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,6 +68,8 @@ fun DAMFLixApp() {
             }
         }
     ) { innerPadding ->
+        val context = LocalContext.current
+        val peliculaViewModel: PeliculaViewModel = viewModel(factory = PeliculaViewModelFactory(context))
         NavHost(
             navController = navController,
             startDestination = Ruta.Perfil.path,
@@ -81,10 +79,15 @@ fun DAMFLixApp() {
                 PerfilUsuario()
             }
             composable(Ruta.Listado.path) {
-                PantallaCatalogoDAMFlix()
+                ListaPeliculasScreen(viewModel = peliculaViewModel)
             }
             composable(Ruta.Formulario.path) {
-                FormularioPelicula()
+                FormularioPelicula(
+                    viewModel = peliculaViewModel,
+                    onPeliculaGuardada = {
+                        navController.popBackStack()
+                    }
+                )
             }
         }
     }
