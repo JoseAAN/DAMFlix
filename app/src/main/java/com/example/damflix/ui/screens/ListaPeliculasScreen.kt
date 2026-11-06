@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.damflix.R
+import com.example.damflix.data.local.PeliculaEntity
 import com.example.damflix.viewmodel.PeliculaViewModel
 
 @Composable
@@ -34,29 +35,37 @@ fun ListaPeliculasScreen(
             items = peliculas,
             key = { p -> p.id }
         ) { pelicula ->
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Row(
-                    modifier = Modifier.padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = pelicula.titulo,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = "${pelicula.director} | ${pelicula.anio}",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                    }
-                    IconButton(onClick = { viewModel.conmutarFavorrito(pelicula) }) {
-                        Icon(
-                            imageVector = if (pelicula.esFavorita) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = stringResource(R.string.btn_accept),
-                            tint = if (pelicula.esFavorita) Color.Red else Color.Gray
-                        )
-                    }
-                }
+            TarjetaPeliculaItem(
+                pelicula = pelicula,
+                onToggleFavorito = { viewModel.conmutarFavorito(pelicula) }
+            )
+        }
+    }
+}
+
+
+@Composable
+fun TarjetaPeliculaItem(
+    pelicula: PeliculaEntity,
+    onToggleFavorito: () -> Unit
+){
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = pelicula.titulo,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            IconButton(onClick = onToggleFavorito) {
+                Icon(
+                    imageVector = if (pelicula.esFavorita) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = stringResource(R.string.btn_accept),
+                    tint = if (pelicula.esFavorita) Color.Red else Color.Gray
+                )
             }
         }
     }

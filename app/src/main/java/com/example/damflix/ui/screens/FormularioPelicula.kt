@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.damflix.R
 import com.example.damflix.ui.components.CampoEntrada
 import com.example.damflix.viewmodel.PeliculaViewModel
@@ -79,7 +78,7 @@ fun FormularioPelicula(
         Button(
             onClick = {
                 val anio = anioTexto.toIntOrNull() ?:0
-                viewModel.agregarPeliculas(
+                viewModel.agregarPelicula(
                     titulo = titulo,
                     director = director,
                     anio = anio,

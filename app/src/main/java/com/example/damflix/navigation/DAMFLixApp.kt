@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.damflix.ui.screens.ListaPeliculasScreen
 import com.example.damflix.viewmodel.PeliculaViewModel
+import com.example.damflix.DAMFlixApplication
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,7 +70,8 @@ fun DAMFLixApp() {
         }
     ) { innerPadding ->
         val context = LocalContext.current
-        val peliculaViewModel: PeliculaViewModel = viewModel(factory = PeliculaViewModelFactory(context))
+        val app = context.applicationContext as DAMFlixApplication
+        val peliculaViewModel: PeliculaViewModel = viewModel(factory = PeliculaViewModelFactory(app.repository))
         NavHost(
             navController = navController,
             startDestination = Ruta.Perfil.path,
