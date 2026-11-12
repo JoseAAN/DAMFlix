@@ -1,5 +1,6 @@
 package com.example.damflix.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,6 +23,7 @@ import com.example.damflix.viewmodel.PeliculaViewModel
 @Composable
 fun ListaPeliculasScreen(
     viewModel: PeliculaViewModel,
+    onPeliculaClick: (Int) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val peliculas by viewModel.listaPeliculas.collectAsStateWithLifecycle()
@@ -37,7 +39,8 @@ fun ListaPeliculasScreen(
         ) { pelicula ->
             TarjetaPeliculaItem(
                 pelicula = pelicula,
-                onToggleFavorito = { viewModel.conmutarFavorito(pelicula) }
+                onToggleFavorito = { viewModel.conmutarFavorito(pelicula) },
+                onClick = { onPeliculaClick(pelicula.id)}
             )
         }
     }
@@ -47,9 +50,10 @@ fun ListaPeliculasScreen(
 @Composable
 fun TarjetaPeliculaItem(
     pelicula: PeliculaEntity,
-    onToggleFavorito: () -> Unit
+    onToggleFavorito: () -> Unit,
+    onClick: () -> Unit = {}
 ){
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(modifier = Modifier.fillMaxWidth().clickable(onClick = onClick)) {
         Row(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically

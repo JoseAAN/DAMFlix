@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Details
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -21,8 +22,16 @@ import com.example.damflix.viewmodel.PeliculaViewModel
 import kotlinx.coroutines.launch
 
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
+import com.example.damflix.DAMFlixApplication
+import com.example.damflix.ui.screens.PantallaDetalleScreen
+import com.example.damflix.viewmodel.DetallePeliculaViewModel
+import com.example.damflix.viewmodel.DetallePeliculaViewModelFactory
 
 sealed class Ruta(val path: String, val label: String, val icon: ImageVector) {
     object Perfil : Ruta(
@@ -42,6 +51,10 @@ sealed class Ruta(val path: String, val label: String, val icon: ImageVector) {
         label = "Añadir",
         icon = Icons.Filled.Add
     )
+
+    object Detalle : Ruta("detalle/{peliculaId}", "Detalle", Icons.Filled.Details) {
+        fun crearRuta(peliculaId: Int) = "detalle/$peliculaId"
+    }
 }
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
@@ -125,16 +138,37 @@ fun AppDAMFlixMainScreen(viewModel: PeliculaViewModel) {
                     PerfilUsuario()
                 }
                 composable(Ruta.Listado.path) {
-                    ListaPeliculasScreen(viewModel = viewModel)
+                    ListaPeliculasScreen(
+                        viewModel = viewModel,
+                        onPeliculaClick = { peliculaId ->
+                            navController.navigate(Ruta.Detalle.crearRuta(peliculaId))
+                        }
+                    )
                 }
                 composable(Ruta.Formulario.path) {
-                    FormularioPelicula(
-                        viewModel = viewModel,
-                        onPeliculaGuardada = {
-                            navController.navigate(Ruta.Listado.path) {
-                                popUpTo(Ruta.Perfil.path) { saveState = true }
-                            }
+                    FormularioPelicula(viewModel)
+                }
+
+                composable(
+                    route = Ruta.Detalle.path,
+                    arguments = listOf(
+                        navArgument("peliculaId") {
+                            type = NavType.IntType
                         }
+                    )
+                ) { backStackEntry ->
+                    val id = backStackEntry.arguments?.getInt("peliculaId") ?: 0
+
+                    val context = LocalContext.current
+                    val app = context.applicationContext as DAMFlixApplication
+
+                    val detalleViewModel: DetallePeliculaViewModel = viewModel(
+                        factory = DetallePeliculaViewModelFactory(app.repository)
+                    )
+                    PantallaDetalleScreen(
+                        peliculaId = id,
+                        viewModel = detalleViewModel,
+                        onVolver = { navController.popBackStack()}
                     )
                 }
             }
